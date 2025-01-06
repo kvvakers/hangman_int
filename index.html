@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hangman Game</title>
+    <button id="start" onclick="startGame()">Start Game!</button>
+    <button id="addWord" onclick="addWord()">Add New Word!</button>
+    <div id="gameInfo"></div>
+    <div id="endGame"></div>
+    <div id="inputSection" style="display: none;">
+        <input type="text" id="guessInput" maxlength="1" placeholder="Enter a letter" />
+        <button onclick="submitGuess()">Submit</button>
+        <div id="errorMessage" style="color: red; font-size: 0.9em; margin-top: 5px;"></div>
+    </div>
+    <canvas id="hangmanCanvas" width="400" height="400"></canvas>
+</head>
+<body>
+<script src="hangman.js"></script>
+<script src="hangman-drawing.js"></script>
+</body>
+</html>

@@ -42,8 +42,7 @@ function startGame() {
     currentAttempt = 0;
     attempt = 6; 
 
-    console.log(randomWord); 
-
+    console.log(randomWord);
   
     gameInfo.innerText = `Word: ${answerArray.join(' ')}\nAttempts: ${currentAttempt}/${attempt}\nUsed Letters: ${usageLetters.join(', ')}`;
     endGameMsg.innerText = "";
@@ -52,21 +51,42 @@ function startGame() {
 }
 
 function submitGuess() {
+    const guess = getGuess();
+    if (!validateGuess(guess)) return;
+
+    const letterFound = processGuess(guess);
+    updateGameInfo();
+
+    if (checkWinCondition()) {
+        endGame(`You win! The answer was "${randomWord}".`);
+    } else if (checkLoseCondition()) {
+        endGame(`You lose! The answer was "${randomWord}".`);
+    }
+}
+
+function getGuess() {
     const guess = guessInput.value.toLowerCase();
     guessInput.value = "";
     errorMessage.innerText = "";
+    return guess;
+}
 
+function validateGuess(guess) {
     if (!guess.match(/^[a-z]$/)) {
         errorMessage.innerText = "Please enter a valid letter!";
-        return;
+        return false;
     }
-
     if (usageLetters.includes(guess)) {
         errorMessage.innerText = "You already used this letter!";
-        return;
+        return false;
     }
+    return true;
+}
 
+function processGuess(guess) {
     let letterFound = false;
+    usageLetters.push(guess);
+
     for (let i = 0; i < randomWord.length; i++) {
         if (randomWord[i] === guess) {
             answerArray[i] = guess;
@@ -79,16 +99,22 @@ function submitGuess() {
         currentAttempt++;
         drawStage(currentAttempt);
     }
+    return letterFound;
+}
 
-    usageLetters.push(guess);
-    
+function updateGameInfo() {
     gameInfo.innerText = `Word: ${answerArray.join(' ')}\nAttempts: ${currentAttempt}/${attempt}\nUsed Letters: ${usageLetters.join(', ')}`;
-    
-    if (remainingLetters === 0) {
-        endGameMsg.innerText = `You win! The answer was "${randomWord}".`;
-        inputSection.style.display = "none";
-    } else if (currentAttempt >= attempt) {
-        endGameMsg.innerText = `You lose! The answer was "${randomWord}".`;
-        inputSection.style.display = "none";
-    }
+}
+
+function checkWinCondition() {
+    return remainingLetters === 0;
+}
+
+function checkLoseCondition() {
+    return currentAttempt >= attempt;
+}
+
+function endGame(message) {
+    endGameMsg.innerText = message;
+    inputSection.style.display = "none"; // Скрываем поле ввода
 }

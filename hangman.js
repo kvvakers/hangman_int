@@ -27,7 +27,14 @@ function saveWord(newWord) {
 function addWord() {
     let newWord = prompt('Enter the new word!');
     if (newWord) {
-        saveWord(newWord.toLowerCase());
+        newWord = newWord.trim().toLowerCase();
+
+        if (!newWord.match(/^[a-z]+$/)) {
+            alert("The word must consist of only English letters and contain no spaces, numbers, or special characters.");
+            return;
+        }
+
+        saveWord(newWord);
         alert(`The word "${newWord}" has been added!`);
     }
 }
@@ -54,7 +61,7 @@ function submitGuess() {
     const guess = getGuess();
     if (!validateGuess(guess)) return;
 
-    const letterFound = processGuess(guess);
+    processGuess(guess);
     updateGameInfo();
 
     if (checkWinCondition()) {
@@ -116,5 +123,5 @@ function checkLoseCondition() {
 
 function endGame(message) {
     endGameMsg.innerText = message;
-    inputSection.style.display = "none"; // Скрываем поле ввода
+    inputSection.style.display = "none";
 }
